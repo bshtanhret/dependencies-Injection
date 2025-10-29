@@ -2,16 +2,11 @@ import { Logger } from './logger';
 
 import type { ApiConfig } from '../types';
 export class HTTP {
-  logger: Logger;
-  apiConfig: ApiConfig;
-
-  constructor(apiConfig: ApiConfig) {
-    this.apiConfig = apiConfig;
-    this.logger = new Logger();
-  }
+  static $singleton = true
+  static $inject = ['logger', 'config']
 
   async get(url: string) {
-    const response = await fetch(`${this.apiConfig.path}${url}`);
+    const response = await fetch(`${this.config.path}${url}`);
 
     if (response.ok) {
       const responseData = await response.json();
@@ -22,4 +17,6 @@ export class HTTP {
       this.logger.error(`Status: ${response.status}. Status Text: ${response.statusText}`);
     }
   }
+
+  constructor(private readonly logger: Logger, private readonly config: ApiConfig) {}
 }
