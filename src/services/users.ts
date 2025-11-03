@@ -2,25 +2,15 @@ import { HTTP } from './http';
 
 import type { ApiConfig, User } from '../types';
 export class Users {
-  static $singleton = true
-  static $inject = ['http', 'config']
+  http: HTTP;
+  apiConfig: ApiConfig;
 
-  private getUsers() {
-    return this.http.get(this.config.resources.users) as unknown as Promise<User[]>;
+  constructor(apiConfig: ApiConfig) {
+    this.http = new HTTP(apiConfig);
+    this.apiConfig = apiConfig;
   }
 
-  async render() {
-    const users = await this.getUsers();
-  
-    const listNode = document.getElementById('users-list');
-  
-    users.forEach((user) => {
-      const listItemNode = document.createElement('li');
-  
-      listItemNode.innerHTML = user.name;
-      listNode.appendChild(listItemNode);
-    });
+  getUsers() {
+    return this.http.get(this.apiConfig.resources.users) as unknown as User[];
   }
-
-  constructor(private readonly http: HTTP, private readonly config: ApiConfig) {}
 }
