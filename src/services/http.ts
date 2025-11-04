@@ -2,6 +2,8 @@ import { Logger } from './logger';
 
 import type { ApiConfig } from '../types';
 export class HTTP {
+  constructor(private readonly logger: Logger, private readonly config: ApiConfig) {}
+
   static $singleton = true
   static $inject = ['logger', 'config']
 
@@ -17,6 +19,4 @@ export class HTTP {
       this.logger.error(`Status: ${response.status}. Status Text: ${response.statusText}`);
     }
   }
-
-  constructor(private readonly logger: Logger, private readonly config: ApiConfig) {}
 }
