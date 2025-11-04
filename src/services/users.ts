@@ -2,15 +2,12 @@ import { HTTP } from './http';
 
 import type { ApiConfig, User } from '../types';
 export class Users {
-  http: HTTP;
-  apiConfig: ApiConfig;
+  constructor(private readonly http: HTTP, private readonly config: ApiConfig) {}
 
-  constructor(apiConfig: ApiConfig) {
-    this.http = new HTTP(apiConfig);
-    this.apiConfig = apiConfig;
-  }
+  static $singleton = true
+  static $inject = ['http', 'config']
 
   getUsers() {
-    return this.http.get(this.apiConfig.resources.users) as unknown as User[];
+    return this.http.get(this.config.resources.users) as unknown as Promise<User[]>;
   }
 }
